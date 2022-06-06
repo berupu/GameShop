@@ -9,7 +9,7 @@ import SwiftUI
 
 class LogInVM : ObservableObject {
     
-    @Published var username : String = ""
+    @Published var email : String = ""
     @Published var password : String = ""
     @Published var reTypePassword : String = ""
     

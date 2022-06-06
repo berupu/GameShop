@@ -52,17 +52,51 @@ struct LogInPageView: View {
             ScrollView(.vertical, showsIndicators: false) {
 
                 VStack {
-                    Text("LogIn")
+                    Text(loginVM.craeteAccountMOde ? "Create Account" : "LogIn")
                         .font(.system(size: 22).bold())
                         //.shadow(color: Color.gray, radius: 15, x: 0, y: 12)
                         .frame(maxWidth: .infinity,alignment: .leading)
                         .padding()
                     
-                    customTextField(title: "Email", icon: "envelope", placeholder: "Enter your username", value: $loginVM.username)
+                    customTextField(title: "Email", icon: "envelope", placeholder: "Enter your email", value: $loginVM.email)
                     
                     customTextField(title: "Password", icon: "lock", placeholder: "Enter your password", value: $loginVM.password)
                     
-                    customTextField(title: "Re-enter password", icon: "lock", placeholder: "Re-enter your username", value: $loginVM.reTypePassword)
+                    if loginVM.craeteAccountMOde {
+                        customTextField(title: "Re-enter password", icon: "lock", placeholder: "Re-enter your password", value: $loginVM.reTypePassword)
+                    }
+                    
+                    //login button
+                    Button {
+                        print("login pressed")
+                    } label: {
+                        Text(loginVM.craeteAccountMOde ? "Create Account" : "LogIn")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
+                            .background(.purple.opacity(0.5))
+                            .cornerRadius(12)
+                            .padding(.horizontal, 60)
+                            .padding(.top)
+                            
+                    }
+                    
+                    Button {
+                        withAnimation(.spring()) {
+                            loginVM.craeteAccountMOde.toggle()
+                        }
+                    } label: {
+                        Text(loginVM.craeteAccountMOde ? "Back to LogIn" : "Create Account")
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity)
+                            //.frame(height: 60)
+                            .padding(.horizontal, 60)
+                            .padding(.vertical)
+                            
+                    }
+                    
+                    
+
 
                 }
             }
@@ -97,6 +131,7 @@ struct LogInPageView: View {
                 
             
         }
+        
         .padding()
     }
 }
@@ -114,3 +149,4 @@ extension View {
         UIScreen.main.bounds
     }
 }
+
