@@ -13,7 +13,7 @@ struct GameShopApp: App {
 
     var body: some Scene {
         WindowGroup {
-            LogInPageView()
+            LogInPage()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

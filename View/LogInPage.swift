@@ -1,5 +1,5 @@
 //
-//  LogInPageView.swift
+//  LogInPage.swift
 //  Shared
 //
 //  Created by Ashraful Islam Rupu on 5/30/22.
@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct LogInPageView: View {
+struct LogInPage: View {
     
+    @Environment(\.presentationMode) var presentationMode
     @StateObject var loginVM: LogInVM = LogInVM()
     
     
@@ -68,7 +69,8 @@ struct LogInPageView: View {
                     
                     //login button
                     Button {
-                        print("login pressed")
+                        loginVM.logIn()
+                        presentationMode.wrappedValue.dismiss()
                     } label: {
                         Text(loginVM.craeteAccountMOde ? "Create Account" : "LogIn")
                             .foregroundColor(.white)
@@ -80,6 +82,7 @@ struct LogInPageView: View {
                             .padding(.top)
                             
                     }
+                
                     
                     Button {
                         withAnimation(.spring()) {
@@ -110,6 +113,10 @@ struct LogInPageView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.purple)
+        .fullScreenCover(isPresented: $loginVM.logInSuccess) {
+            MainPage()
+        }
+        
     }
     
     
@@ -137,9 +144,9 @@ struct LogInPageView: View {
 }
 
 
-struct LogInPageView_Previews: PreviewProvider {
+struct LogInPage_Previews: PreviewProvider {
     static var previews: some View {
-        LogInPageView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        LogInPage().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .previewDevice("iPhone 13")
     }
 }

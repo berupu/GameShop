@@ -15,12 +15,10 @@ class LogInVM : ObservableObject {
     
     @Published var showPassword : Bool = false
     @Published var craeteAccountMOde: Bool = false
+    @Published var logInSuccess: Bool = false
     
     func logIn() {
-        //for login
+        self.logInSuccess.toggle()
     }
     
-    func createAccount(){
-        //for account creation
-    }
 }
