@@ -6,10 +6,20 @@
 //
 
 import SwiftUI
+import Combine
 
 class MainPageVM: ObservableObject {
     
     @Published var productType: ProductType = .Games
+    
+    
+    @Published var searchText: String = ""
+    @Published var searchFieldTapped: Bool = false
+    @Published var filteredProductsBySearch: [Product]?
+    
+    @Published var filteredProducts: [Product] = []
+    
+    var searchCancelable: AnyCancellable?
     
     @Published var productData: [Product] = [
         Product(type: .Games, productName: "bf1", description: "BattleField 1", price: "$28", availability: false),
@@ -25,12 +35,34 @@ class MainPageVM: ObservableObject {
     
     init(){
         filteredByProductType()
+        
+        searchCancelable = $searchText.removeDuplicates()
+        //Hold Publisher for 0.5 second
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .sink(receiveValue: { [weak self] str in
+                guard let self = self else {return}
+                
+                if str != "" {
+                    self.filteredBySearch()
+                }else {
+                    self.filteredProductsBySearch = nil
+                }
+            })
+        
     }
-    
-    @Published var filteredProducts: [Product] = []
     
     func filteredByProductType(){
         filteredProducts = productData.filter({$0.type == self.productType})
     }
+    
+    func filteredBySearch(){
+        
+        DispatchQueue.main.async(qos: .userInteractive) {
+            self.filteredProductsBySearch = self.productData.filter({$0.description.lowercased().contains(self.searchText.lowercased())})
+        }
+        
+    }
+    
+    
 }
 

@@ -15,7 +15,21 @@ struct MainPage: View {
     
     var body: some View {
         VStack {
-            SearchBar()
+            
+            ZStack {
+                if mainPageVM.searchFieldTapped {
+                    SearchBar()
+                } else {
+                    SearchBar()
+                        .matchedGeometryEffect(id: "SEARCHBAR", in: productTypeAnimation)
+                }
+            }
+            .onTapGesture {
+                withAnimation {
+                    mainPageVM.searchFieldTapped = true
+                }
+            }
+            
             Text("Order to Fill \nthe Cart")
                 .font(.system(size: 25))
                 .bold()
@@ -49,6 +63,14 @@ struct MainPage: View {
             //Works fine on Simulator.
         })
         .background(.gray.opacity(0.2))
+        .overlay(
+            ZStack {
+                if mainPageVM.searchFieldTapped {
+                    SearchView(animation: productTypeAnimation)
+                        .environmentObject(mainPageVM)
+                }
+            }
+        )
         
     }
     
